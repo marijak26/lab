@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  lab:
+    image: "postgres"
+    container_name: "lab-events"
+    environment:
+      - POSTGRES_USER=marija26
+      - POSTGRES_PASSWORD=M%k070789317
+      - POSTGRES_DB=events
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data

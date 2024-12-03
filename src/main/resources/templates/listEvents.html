@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Booking - Choose an Event</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .event-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .event-container h3 {
+            margin: 0;
+        }
+
+        .event-container p {
+            margin: 5px 0;
+        }
+
+        .event-container input[type="number"], .event-container input[type="text"], .event-container input[type="submit"] {
+            margin-top: 10px;
+            display: block;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .error-message{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+</header>
+
+<main>
+
+    <form action="/events" method="get">
+        <label for="searchText">Search by Event Name:</label>
+        <input type="text" id="searchText" name="searchText" placeholder="Enter event name"><br>
+
+        <label for="minRating">Minimum Rating:</label>
+        <input type="number" id="minRating" name="minRatingString" min="0" max="10" step="0.1" placeholder="Enter minimum rating"><br>
+
+        <label for="categoryName">Category:</label>
+        <select id="categoryName" name="categoryName">
+            <option value="">Select category</option>
+            <th:block th:each="category : ${categories}">
+                <option th:value="${category.name}" th:text="${category.name}"></option>
+            </th:block>
+        </select>
+        <br>
+        <label for="locationId">Search by Location Id:</label>
+        <input type="number" id="locationId" name="locationId" step="1" placeholder="Enter location id"><br>
+        <br>
+
+        <input type="submit" value="Search">
+    </form>
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}">Error</p>
+    </div>
+
+    <section>
+        <h4>Don't see the event you're looking for? Add a new one</h4>
+        <a th:href="@{/events/add-form}">Add new event</a>
+    </section>
+
+    <h2>Choose an event:</h2>
+
+    <form action="/eventBooking" method="post">
+        <div th:each="event : ${events}" class="event-container">
+            <input type="radio" id="event-${event.id}" name="eventId" th:value="${event.id}" required>
+            <label for="event-${event.id}">
+                <a th:href="@{/events/{eventId}(eventId=${event.id})}" th:text="${event.name}">Event name</a>
+                <p th:text="'Description: ' + ${event.description}">Event Description</p>
+                <p th:text="'Rating: ' + ${event.popularityScore}">Event Rating</p>
+                <p th:text="'Category: ' + (${event.category != null ? event.category.name : 'No category'})">Category</p>
+                <p th:text="'Location: ' + (${event.getLocation().getName() != null ? event.getLocation().getName() : 'No location'})">Location</p>
+            </label>
+            <div>
+                <a th:href="@{/events/delete/{id}(id=${event.id})}">Delete</a> |
+                <a th:href="@{/events/edit-form/{id}(id=${event.id})}" class="btn btn-sm btn-info edit-event">Edit</a>
+            </div>
+        </div>
+        <div>
+            <label for="numTickets-${event.id}">Choose number of tickets:</label>
+            <input type="number" id="numTickets-${event.id}" name="numTickets" min="1" max="10" required>
+
+            <label for="attendeeName-${event.id}">Please input your name:</label>
+            <input type="text" id="attendeeName-${event.id}" name="attendeeName" required>
+        </div>
+        <input type="submit" value="Submit Booking">
+    </form>
+</main>
+</body>
+</html>

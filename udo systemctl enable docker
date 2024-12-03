@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Mon 2024-12-02 15:54:42 CET; 23min ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 28584 (dockerd)
+      Tasks: 13
+     Memory: 21.8M
+     CGroup: /system.slice/docker.service
+             └─28584 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+дек 02 15:54:41 marija26-Vostro-3520 systemd[1]: Starting Docker Application Container Engine...
+дек 02 15:54:41 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:41.949381968+01:00" level=info msg="Starting up"
+дек 02 15:54:41 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:41.950416548+01:00" level=info msg="detected 127.0.0.53 nameserver, assuming systemd-resolved, so using resolv.conf: /run/systemd/resolve/resolv.conf"
+дек 02 15:54:41 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:41.973170784+01:00" level=info msg="Loading containers: start."
+дек 02 15:54:42 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:42.044839815+01:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
+дек 02 15:54:42 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:42.065778385+01:00" level=info msg="Loading containers: done."
+дек 02 15:54:42 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:42.071826402+01:00" level=info msg="Docker daemon" commit=41ca978 containerd-snapshotter=false storage-driver=overlay2 version=27.3.1
+дек 02 15:54:42 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:42.071895901+01:00" level=info msg="Daemon has completed initialization"
+дек 02 15:54:42 marija26-Vostro-3520 dockerd[28584]: time="2024-12-02T15:54:42.099655933+01:00" level=info msg="API listen on /run/docker.sock"
+дек 02 15:54:42 marija26-Vostro-3520 systemd[1]: Started Docker Application Container Engine.
