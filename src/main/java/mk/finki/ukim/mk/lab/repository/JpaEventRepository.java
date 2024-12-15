@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface JpaEventRepository extends JpaRepository<Event, Long> {
+    Optional<Event> findEventsByUser_Username(String username);
     List<Event> findAllByLocation_Id(Long locationId);
     List<Event> findAll();
     List<Event> findByNameContainingIgnoreCase(String text);

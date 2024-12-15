@@ -3,6 +3,9 @@ package mk.finki.ukim.mk.lab.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -24,6 +27,12 @@ public class Event {
     @ManyToOne
     private Location location;
 
+    @ManyToOne
+    private User user;
+
+    @ManyToMany
+    private List<Event> events;
+
     public Event(String name, String description, double popularityScore, Category category, Location location) {
         this.name = name;
         this.description = description;
@@ -31,7 +40,8 @@ public class Event {
         this.category = category;
         this.location = location;
     }
+    public Event(User user){
+        this.user = user;
+        this.events = new ArrayList<>();
+    }
 }
-
-//sudo systemctl stop postgresql - naredba za da loadnes app
-//psql postgre stop - isto ko 1
