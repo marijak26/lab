@@ -79,7 +79,7 @@ public class EventController {
     public String saveEvent(@RequestParam(required = false) Long id,@RequestParam String eventName, @RequestParam String description, @RequestParam double popularityScore, @RequestParam Long categoryId, @RequestParam Long locationId) {
         if(id != null) {
             if (locationId != null) {
-                this.eventService.editEvent(id, eventName, description, popularityScore, locationId);
+                this.eventService.editEvent(id, eventName, description, popularityScore, categoryId, locationId);
             }
         }
         else{

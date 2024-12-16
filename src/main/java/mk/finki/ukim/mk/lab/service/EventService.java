@@ -17,7 +17,7 @@ public interface EventService {
 
     Optional<Event> findEventById(Long id);
 
-    Optional<Event> editEvent(Long id, String eventName, String description, double popularityScore, Long locationId);
+    Optional<Event> editEvent(Long id, String eventName, String description, double popularityScore,Long categoryId, Long locationId);
 
     void deleteEventById(Long eventId);
     List<Event> findAllByLocation_Id(Long locationId);

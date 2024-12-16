@@ -57,11 +57,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> editEvent(Long id, String eventName, String description, double popularityScore, Long locationId) {
+    public Optional<Event> editEvent(Long id, String eventName, String description, double popularityScore,Long categoryId, Long locationId) {
         Event event = this.eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Event not found"));
         event.setName(eventName);
         event.setDescription(description);
         event.setPopularityScore(popularityScore);
+        Category category = this.categoryRepository.findCategoryById(categoryId).orElseThrow(()-> new CategoryNotFoundException(categoryId));
+        event.setCategory(category);
         Location location = this.locationRepository.findById(locationId).orElseThrow(() -> new LocationNotFoundException(locationId));
         event.setLocation(location);
         return Optional.of(this.eventRepository.save(event));
