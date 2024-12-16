@@ -2,108 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Booking - Choose an Event</title>
-    <style type="text/css">
+    <style>
         body {
-            width: 800px;
+            width: 90%;
+            max-width: 1200px;
             margin: auto;
             font-family: Arial, sans-serif;
         }
 
-        h2 {
-            margin-top: 20px;
+        header, .container {
+            margin-bottom: 20px;
         }
 
-        .event-container {
+        header h1 {
+            text-align: center;
+        }
+
+        .search-form, .events-list {
+            margin-top: 20px;
+            padding: 20px;
             border: 1px solid #ccc;
-            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .search-form h2, .events-list h2 {
+            margin-top: 0;
+        }
+
+        .form-group {
             margin-bottom: 15px;
         }
 
+        .event-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
         .event-container h3 {
-            margin: 0;
+            margin: 0 0 10px 0;
         }
 
-        .event-container p {
-            margin: 5px 0;
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .event-container input[type="number"], .event-container input[type="text"], .event-container input[type="submit"] {
-            margin-top: 10px;
-            display: block;
+        .btn-primary {
+            background-color: #007bff;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
+        .btn-info {
+            background-color: #17a2b8;
         }
-        .error-message{
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .error-message {
             color: red;
         }
     </style>
 </head>
 <body>
+
 <header>
     <h1>Welcome to our Event Booking App</h1>
 </header>
 
 <main>
+    <!-- Search Form -->
+    <section class="search-form">
+        <h2>Search Events</h2>
+        <form action="/events" method="get">
+            <div class="form-group">
+                <label for="searchText">Search by Event Name:</label>
+                <input type="text" id="searchText" name="searchText" placeholder="Enter event name" class="form-control">
+            </div>
 
-    <form action="/events" method="get">
-        <label for="searchText">Search by Event Name:</label>
-        <input type="text" id="searchText" name="searchText" placeholder="Enter event name"><br>
+            <div class="form-group">
+                <label for="minRating">Minimum Rating:</label>
+                <input type="number" id="minRating" name="minRatingString" min="0" max="10" step="0.1" placeholder="Enter minimum rating" class="form-control">
+            </div>
 
-        <label for="minRating">Minimum Rating:</label>
-        <input type="number" id="minRating" name="minRatingString" min="0" max="10" step="0.1" placeholder="Enter minimum rating"><br>
+            <div class="form-group">
+                <label for="categoryName">Category:</label>
+                <select id="categoryName" name="categoryName" class="form-control">
+                    <option value="">Select category</option>
+                    <th:block th:each="category : ${categories}">
+                        <option th:value="${category.name}" th:text="${category.name}"></option>
+                    </th:block>
+                </select>
+            </div>
 
-        <label for="categoryName">Category:</label>
-        <select id="categoryName" name="categoryName">
-            <option value="">Select category</option>
-            <th:block th:each="category : ${categories}">
-                <option th:value="${category.name}" th:text="${category.name}"></option>
-            </th:block>
-        </select>
-        <br>
-        <label for="locationId">Search by Location Id:</label>
-        <input type="number" id="locationId" name="locationId" step="1" placeholder="Enter location id"><br>
-        <br>
+            <div class="form-group">
+                <label for="locationId">Search by Location ID:</label>
+                <input type="number" id="locationId" name="locationId" step="1" placeholder="Enter location id" class="form-control">
+            </div>
 
-        <input type="submit" value="Search">
-    </form>
-    <div th:if="${errorMessage}" class="error-message">
-        <p th:text="${errorMessage}">Error</p>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}">Error</p>
+        </div>
+    </section>
+    <div>
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+            <a href="/events/add-form" class="btn btn-dark">Add New Event</a>
+        </th:block>
     </div>
 
-    <section>
-        <h4>Don't see the event you're looking for? Add a new one</h4>
-        <a th:href="@{/events/add-form}">Add new event</a>
-    </section>
+    <!-- Events List -->
+    <section class="events-list">
+        <h2>Choose an Event</h2>
+        <form action="/eventBooking" method="post">
+            <div th:each="event : ${events}" class="event-container">
+                <!-- Event Information -->
+                <input type="radio" id="event-${event.id}" name="eventId" th:value="${event.id}" required>
+                <label for="event-${event.id}">
+                    <h3 th:text="${event.name}">Event Name</h3>
+                    <p th:text="'Description: ' + ${event.description}">Event Description</p>
+                    <p th:text="'Rating: ' + ${event.popularityScore}">Event Rating</p>
+                    <p th:text="'Category: ' + (${event.category != null ? event.category.name : 'No category'})">Category</p>
+                    <p th:text="'Location: ' + (${event.getLocation().getName() != null ? event.getLocation().getName() : 'No location'})">Location</p>
+                </label>
 
-    <h2>Choose an event:</h2>
-
-    <form action="/eventBooking" method="post">
-        <div th:each="event : ${events}" class="event-container">
-            <input type="radio" id="event-${event.id}" name="eventId" th:value="${event.id}" required>
-            <label for="event-${event.id}">
-                <a th:href="@{/events/{eventId}(eventId=${event.id})}" th:text="${event.name}">Event name</a>
-                <p th:text="'Description: ' + ${event.description}">Event Description</p>
-                <p th:text="'Rating: ' + ${event.popularityScore}">Event Rating</p>
-                <p th:text="'Category: ' + (${event.category != null ? event.category.name : 'No category'})">Category</p>
-                <p th:text="'Location: ' + (${event.getLocation().getName() != null ? event.getLocation().getName() : 'No location'})">Location</p>
-            </label>
-            <div>
-                <a th:href="@{/events/delete/{id}(id=${event.id})}">Delete</a> |
-                <a th:href="@{/events/edit-form/{id}(id=${event.id})}" class="btn btn-sm btn-info edit-event">Edit</a>
+                <!-- Actions -->
+                <div class="text-right">
+                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/events/delete/{id}(id=${event.id})}" class="btn btn-danger">Delete</a>
+                        <a th:href="@{/events/edit-form/{id}(id=${event.id})}" class="btn btn-info">Edit</a>
+                    </th:block>
+                </div>
             </div>
-        </div>
-        <div>
-            <label for="numTickets-${event.id}">Choose number of tickets:</label>
-            <input type="number" id="numTickets-${event.id}" name="numTickets" min="1" max="10" required>
 
-            <label for="attendeeName-${event.id}">Please input your name:</label>
-            <input type="text" id="attendeeName-${event.id}" name="attendeeName" required>
-        </div>
-        <input type="submit" value="Submit Booking">
-    </form>
+            <!-- Ticket Booking Section -->
+            <div class="form-group">
+                <label for="numTickets">Choose number of tickets:</label>
+                <input type="number" id="numTickets" name="numTickets" min="1" max="10" required class="form-control">
+
+                <label for="attendeeName">Please input your name:</label>
+                <input type="text" id="attendeeName" name="attendeeName" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Submit Booking</button>
+        </form>
+    </section>
 </main>
+
 </body>
 </html>

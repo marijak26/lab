@@ -28,14 +28,14 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/home", "/assets/**", "/register").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Remember Spring Security adds "ROLE_" prefix automatically
+                        .requestMatchers("/", "/home", "/assets/**", "/register", "/events", "/login").permitAll()
+                        .requestMatchers("/admin/**", "/events/add-form", "/events/add", "/events/edit-form/**", "/events/delete/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/events", true))
+                        .defaultSuccessUrl("/events", true)) // Redirect to `/events` after login
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .clearAuthentication(true)
@@ -56,8 +56,8 @@ public class WebSecurityConfig {
                 .build();
 
         UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder.encode("user"))
+                .username("marijak")
+                .password(passwordEncoder.encode("mk"))
                 .roles("USER")
                 .build();
 
@@ -68,7 +68,8 @@ public class WebSecurityConfig {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService()); // Use the in-memory user service
+        authenticationManagerBuilder.userDetailsService(userDetailsService());
         return authenticationManagerBuilder.build();
     }
 }
+

@@ -6,6 +6,7 @@ import mk.finki.ukim.mk.lab.model.Location;
 import mk.finki.ukim.mk.lab.service.CategoryService;
 import mk.finki.ukim.mk.lab.service.EventService;
 import mk.finki.ukim.mk.lab.service.LocationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,13 +75,23 @@ public class EventController {
     }
 
     @PostMapping("/events/add")
-    public String saveEvent(@RequestParam String eventName, @RequestParam String description, @RequestParam double popularityScore, @RequestParam Long categoryId, @RequestParam Long locationId) {
-        this.eventService.saveEvent(eventName, description, popularityScore, categoryId, locationId);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String saveEvent(@RequestParam(required = false) Long id,@RequestParam String eventName, @RequestParam String description, @RequestParam double popularityScore, @RequestParam Long categoryId, @RequestParam Long locationId) {
+        if(id != null) {
+            if (locationId != null) {
+                this.eventService.editEvent(id, eventName, description, popularityScore, locationId);
+            }
+        }
+        else{
+            this.eventService.saveEvent(eventName, description, popularityScore, categoryId, locationId);
+        }
         return "redirect:/events";
     }
 
 
+
     @GetMapping("/events/edit-form/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getEditEventForm(@PathVariable Long id, Model model) {
         if (this.eventService.findEventById(id).isPresent()) {
             Event event = this.eventService.findEventById(id).get();
@@ -94,22 +105,15 @@ public class EventController {
         return "redirect:/events?error=EventNotFound";
     }
 
-
-    @PostMapping("/edit/{eventId}")
-    public String editEvent(@PathVariable Long eventId, @RequestParam String eventName,
-                            @RequestParam String description, @RequestParam double popularityScore,
-                            @RequestParam Long locationId) {
-        this.eventService.editEvent(eventId, eventName, description, popularityScore, locationId);
-        return "redirect:/events";
-    }
-
     @GetMapping("events/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteEvent(@PathVariable Long id) {
         this.eventService.deleteEventById(id);
         return "redirect:/events";
     }
 
     @GetMapping("/events/add-form")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAddEventPage(Model model) {
         List<Category> categories = this.categoryService.listAll();
         List<Location> locations = this.locationService.findAll();

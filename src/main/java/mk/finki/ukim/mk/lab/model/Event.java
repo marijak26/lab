@@ -27,11 +27,6 @@ public class Event {
     @ManyToOne
     private Location location;
 
-    @ManyToOne
-    private User user;
-
-    @ManyToMany
-    private List<Event> events;
 
     public Event(String name, String description, double popularityScore, Category category, Location location) {
         this.name = name;
@@ -39,9 +34,5 @@ public class Event {
         this.popularityScore = popularityScore;
         this.category = category;
         this.location = location;
-    }
-    public Event(User user){
-        this.user = user;
-        this.events = new ArrayList<>();
     }
 }
