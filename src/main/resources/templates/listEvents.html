@@ -130,9 +130,9 @@
             <p th:text="${errorMessage}">Error</p>
         </div>
     </section>
-    <div>
+    <div class="text-right">
         <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-            <a href="/events/add-form" class="btn btn-dark">Add New Event</a>
+            <a href="events/add-form" class="btn btn-info">Add new event</a>
         </th:block>
     </div>
 
