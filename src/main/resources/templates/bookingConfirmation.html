@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking - Confirmation</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, td, th {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <header>
+        <h1>Event Booking Page - Booking Confirmation</h1>
+    </header>
+    <table>
+        <tr>
+            <th colspan="2">Your Booking Status</th>
+        </tr>
+        <tr>
+            <td><b>Attendee Name</b></td>
+            <td th:text="${booking.attendeeName}">[Attendee Name]</td>
+        </tr>
+        <tr>
+            <td><b>Client IP Address</b></td>
+            <td th:text="${booking.attendeeAddress}">[Client IP Address]</td>
+        </tr>
+        <tr>
+            <td><b>Booking for Event</b></td>
+            <td th:text="${booking.eventName}">[Event Name]</td>
+        </tr>
+        <tr>
+            <td><b>Number of Tickets</b></td>
+            <td th:text="${booking.numberOfTickets}">[Number of Tickets]</td>
+        </tr>
+    </table>
+    <br>
+    <a th:href = "@{/events}">Back</a>
+</section>
+</body>
+</html>

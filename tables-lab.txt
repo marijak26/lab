@@ -1,0 +1,28 @@
+events table
+9.8	1	1	1	Concert	The Weeknd Concert
+8.2	2	2	2	Art Exhibition	Julija's Art Exhibition
+9.2	3	3	3	Pancake shop opening	Sakash otvaranje
+6.5	4	4	4	Movie premiere	Smile 2
+7.6	5	5	5	Book fair	Saem na kniga
+9.0	1	6	1	Birthday for a brand	Skopsko 100 Godini
+8.4	2	7	2	Fashion Event	Milan Fashion Week
+5.8	3	8	3	Workshop	IT Workshop
+8.7	4	9	4	Winter Wonderland	Zimzolend
+8.8	5	10	5	Movie	Oppenheimer
+
+categories table
+
+ID  	NAME  
+1	Category 1
+2	Category 2
+3	Category 3
+4	Category 4
+5	Category 5
+
+locations table
+ID  	ADDRESS  	CAPACITY  	LOCATION_DESCRIPTION  	NAME  
+1	Adresa 1	50	Pizza restaurant	Enriko Pizzeria
+2	Adresa 2	75	Drinking bar	Drinkers Paradise Bar
+3	Adresa 3	155	Nightclub	Stanica 26
+4	Adresa 4	300	Rooftop	Ragusa 360
+5	Adresa 5	10000	Stadium	Todor Proeski Stadion
